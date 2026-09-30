@@ -17,9 +17,9 @@ from telegram.ext import Application, CommandHandler, ContextTypes
 import uvicorn
 
 # Required environment variables:
-# TELEGRAM_BOT_TOKEN       = token from @BotFather
-# BOT_USERNAME             = bot username without @, e.g. SourceHubAuthBot
-# SUPABASE_URL             = https://....supabase.co
+# TELEGRAM_BOT_TOKEN       = 8801861469:AAGznNOtPT4RphPNW3hTsHXPQvghdEzkJ44
+# BOT_USERNAME             = @Sjsksjswb_bot
+# SUPABASE_URL             = 
 # SUPABASE_SERVICE_ROLE_KEY= SERVER ONLY; never put this in index.html
 # SUPABASE_PUBLISHABLE_KEY = sb_publishable_... (used only for sign-in)
 # AUTH_SECRET              = long random server secret
