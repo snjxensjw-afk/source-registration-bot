@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#090a0e">
+<title>SourceHub</title>
+<style>
+*{box-sizing:border-box}html{scroll-behavior:auto}body{margin:0;background:#08090d;overscroll-behavior-x:none;color:#f5f5f7;font-family:Inter,Arial,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer;touch-action:manipulation}
+:root{--bg:#08090d;--panel:#101218;--panel2:#171a22;--line:#272a34;--muted:#9298a5;--white:#fff}
+.header{position:sticky;top:0;z-index:30;background:#08090d;border-bottom:1px solid var(--line)}
+.nav{max-width:1120px;height:68px;margin:auto;padding:0 18px;display:flex;align-items:center;justify-content:space-between}.logo{font-size:20px;font-weight:900;letter-spacing:-.7px}.navlinks{display:flex;gap:5px}.navbtn{border:0;background:transparent;color:#969ba7;padding:9px 12px;border-radius:9px}.navbtn:hover,.navbtn.active{background:var(--panel2);color:#fff}.publish-nav{background:#fff;color:#08090d;font-weight:700}
+.page{display:none;max-width:1120px;margin:auto;padding:0 18px 80px}.page.active{display:block}.hero{padding:65px 0 28px}.hero h1{font-size:clamp(42px,8vw,75px);letter-spacing:-4px;line-height:.92;margin:0 0 18px}.hero p{color:var(--muted);font-size:17px;line-height:1.55;max-width:650px}
+.filters{display:flex;gap:10px;margin:20px 0 30px}.input,.select,.textarea{width:100%;background:var(--panel);border:1px solid var(--line);border-radius:11px;color:#fff;padding:13px 14px;outline:0}.filters .select{max-width:190px}.textarea{min-height:145px;resize:vertical}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:15px}.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px}.source{min-height:310px;display:flex;flex-direction:column}.cover{width:100%;aspect-ratio:16/9;object-fit:cover;background:#191c24;border-radius:11px;margin-bottom:15px}.cover-placeholder{width:100%;aspect-ratio:16/9;border-radius:11px;background:linear-gradient(135deg,#191c24,#0d0e13);display:grid;place-items:center;color:#555d6d;margin-bottom:15px;font-size:35px}.top,.meta{display:flex;justify-content:space-between;align-items:center;gap:8px}.tag{font-size:11px;color:#c7cad0;background:#191c24;border:1px solid #2a2d37;padding:6px 9px;border-radius:7px}.muted{color:var(--muted)}.source h3{font-size:21px;margin:12px 0 6px}.source p{color:#969ca9;line-height:1.5;flex:1}.meta{font-size:12px;color:#747b89;flex-wrap:wrap;margin:14px 0}.btn{border:1px solid var(--line);background:var(--panel2);color:#fff;border-radius:10px;padding:12px 15px}.btn:hover{filter:brightness(1.12)}.primary{background:#fff;color:#08090d;border-color:#fff;font-weight:700}.full{width:100%}
+.form-page{max-width:650px;padding-top:55px}.form-page h1{font-size:42px;letter-spacing:-2px}.form{display:grid;gap:14px}.form label{font-size:13px;color:#aeb2bb}.form label>*{margin-top:7px}.filebox{border:1px dashed #3a3e49;border-radius:12px;padding:18px;background:#0d0f14}.notice{background:#11131a;border:1px solid var(--line);border-radius:12px;padding:13px;color:#8f95a2;font-size:13px;line-height:1.5;margin:18px 0}.error{color:#ff7373;font-size:13px;min-height:18px}.success{color:#70db99;font-size:13px;min-height:18px}
+.profile-head{display:flex;gap:17px;align-items:center;padding:55px 0 28px}.avatar{width:76px;height:76px;border-radius:50%;background:#fff;color:#000;display:grid;place-items:center;font-size:29px;font-weight:900}.profile-head h1{margin:0 0 5px;font-size:36px}.stats{display:flex;gap:35px;margin:20px 0 35px}.stat strong{display:block;font-size:22px}.stat span{color:var(--muted);font-size:12px}
+.detail{padding-top:50px}.back{margin-bottom:20px}.detail-cover{width:100%;max-height:480px;object-fit:cover;border-radius:18px;background:#12151c}.detail h1{font-size:48px;letter-spacing:-2px;margin:20px 0 7px}.detail-info{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.description{margin-top:22px;color:#b6bbc5;line-height:1.75;white-space:pre-wrap}.detail-actions{display:flex;gap:10px;margin:25px 0}.bottomnav{display:none}.menu-toggle{width:44px;height:44px;border:1px solid var(--line);background:var(--panel);border-radius:12px;display:grid;place-content:center;gap:4px;padding:0}.menu-toggle span{display:block;width:19px;height:2px;border-radius:2px;background:#fff}.menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:80;display:none;justify-content:flex-end}.menu-overlay.show{display:flex}.menu-panel{width:min(330px,88vw);height:100%;background:#101218;border-left:1px solid #2a2d37;padding:18px;box-shadow:-20px 0 60px rgba(0,0,0,.35);overflow:auto}.menu-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;font-size:20px}.menu-item{width:100%;display:flex;align-items:center;gap:12px;border:1px solid transparent;background:transparent;color:#c8ccd5;text-align:left;padding:13px 14px;border-radius:11px;margin-bottom:5px}.menu-item:hover,.menu-item.active{background:var(--panel2);color:#fff}.menu-item span{width:20px;text-align:center;color:#8f96a5}.menu-item.publish-nav{background:#fff;color:#08090d;font-weight:700}.menu-item.publish-nav span{color:#08090d}.menu-divider{height:1px;background:var(--line);margin:12px 0}.desktop-search{margin-left:auto;margin-right:10px}
+.trending{margin:5px 0 35px}.section-row{display:flex;justify-content:space-between;align-items:center;margin:25px 0 14px}.section-row h2{margin:0;font-size:20px}.section-row span{font-size:12px;color:#737a88}
+.chips{display:flex;gap:8px;overflow:auto;padding-bottom:5px}.chip{white-space:nowrap;border:1px solid var(--line);background:var(--panel);color:#aab0bc;border-radius:999px;padding:9px 13px}.chip.active{background:#fff;color:#090a0e;border-color:#fff}
+.featured{display:grid;grid-template-columns:1.45fr .9fr;gap:15px;margin-bottom:28px}.feature{position:relative;overflow:hidden;min-height:280px;border-radius:18px;border:1px solid var(--line);background:#11131a}.feature img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;opacity:.5}.feature-gradient{position:absolute;inset:0;background:linear-gradient(90deg,#08090d 0%,rgba(8,9,13,.8) 38%,rgba(8,9,13,.15) 100%)}.feature-content{position:relative;z-index:2;padding:28px;max-width:580px;display:flex;flex-direction:column;justify-content:flex-end;height:100%;min-height:280px}.feature-content h2{font-size:34px;letter-spacing:-1.5px;margin:12px 0 7px}.feature-content p{color:#b4bac5;line-height:1.5}.mini-feature{padding:22px;display:flex;flex-direction:column;justify-content:space-between}.mini-number{font-size:45px;font-weight:900;color:#343945}.mini-feature h3{font-size:22px;margin:10px 0}.mini-feature p{color:var(--muted);line-height:1.5}
+.source-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#aab0bc}.dot{width:6px;height:6px;border-radius:50%;background:#74d99a}
+.menu-icon{font-size:20px;margin-right:5px}.toast{position:fixed;left:50%;bottom:86px;transform:translateX(-50%) translateY(20px);background:#fff;color:#090a0e;padding:11px 15px;border-radius:10px;font-size:13px;font-weight:700;opacity:0;pointer-events:none;transition:opacity .15s;z-index:100}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.bookmark{border:0;background:transparent;color:#7e8592;font-size:19px;padding:3px}.bookmark.saved{color:#fff}
+@media(max-width:650px){.featured{grid-template-columns:1fr}.feature{min-height:260px}.mini-feature{min-height:180px}.desktop-search{display:none}.nav{height:62px;padding:0 14px}.logo{font-size:18px}}
+.empty{text-align:center;color:#747b89;padding:60px 0}.footer{border-top:1px solid var(--line);padding:30px 18px;text-align:center;color:#5f6673;margin-top:40px}
+.grid{contain:layout paint}
+.card{contain:content}
+.quick-card,.dash,.activity,.feature,.modalbox,.search-box{contain:layout paint}
+.cover,.detail-cover{content-visibility:auto}
+@media(max-width:650px){
+  .page{contain:layout}
+  .grid{gap:12px}
+  .card{padding:15px}
+}
+
+.hero-kicker{font-size:11px;letter-spacing:2.5px;color:#707785;margin-bottom:18px;font-weight:800}.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:25px}
+.quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:10px 0 38px}.quick-card{background:linear-gradient(145deg,#11131a,#0d0f14);border:1px solid var(--line);border-radius:15px;padding:20px;min-height:150px}.quick-card span{color:#5d6472;font-size:11px}.quick-card strong{display:block;font-size:18px;margin:18px 0 7px}.quick-card p{margin:0;color:#858c99;font-size:13px;line-height:1.5}
+.empty-hero{border:1px dashed #303440;border-radius:18px;padding:55px 25px;text-align:center;background:radial-gradient(circle at 50% 0,#171a22 0,#0d0f14 48%,#0a0b0f 100%)}.empty-icon{width:60px;height:60px;border:1px solid #353946;border-radius:16px;margin:0 auto 18px;display:grid;place-items:center;font-size:25px}.empty-hero h2{margin:0 0 8px;font-size:24px}.empty-hero p{margin:0 auto 20px;color:#858c99;max-width:500px;line-height:1.55}
+@media(max-width:650px){.quick-grid{grid-template-columns:1fr}.hero-actions .btn{width:100%}}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:50;align-items:center;justify-content:center;padding:18px}.modal.show{display:flex}.modalbox{width:min(550px,100%);max-height:90vh;overflow:auto;background:#101218;border:1px solid #2a2d37;border-radius:17px;padding:20px}.modalhead{display:flex;justify-content:space-between;align-items:center}.close{border:0;background:transparent;color:#888;font-size:25px}
+@media(max-width:650px){.page{padding-bottom:80px}.hero{padding-top:45px}.filters{flex-direction:column}.filters .select{max-width:none}.detail h1{font-size:37px}.detail-actions{flex-direction:column}.stats{gap:24px}}
+
+.command{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:#101218;border-radius:10px;padding:8px 10px;color:#818896;font-size:12px}.kbd{border:1px solid #30343f;border-radius:5px;padding:2px 5px;color:#aaa}
+.hero-orbit{position:absolute;right:4%;top:90px;width:260px;height:260px;border:1px solid #242833;border-radius:50%;opacity:.7;pointer-events:none}.hero-orbit:before,.hero-orbit:after{content:"";position:absolute;border:1px solid #20242e;border-radius:50%;inset:38px}.hero-orbit:after{inset:80px}.hero-wrap{position:relative}
+.dashboard-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0 32px}.dash{background:#0f1117;border:1px solid var(--line);border-radius:13px;padding:15px}.dash b{display:block;font-size:18px}.dash span{color:#717886;font-size:11px}
+.activity{border:1px solid var(--line);border-radius:16px;background:#0d0f14;padding:20px;margin:25px 0}.activity h3{margin:0 0 15px}.activity-row{display:flex;gap:12px;align-items:center;padding:12px 0;border-top:1px solid #1c1f27;color:#9ba1ad;font-size:13px}.activity-icon{width:34px;height:34px;border-radius:9px;background:#171a22;display:grid;place-items:center;color:#fff}
+.search-command{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:90;display:none;align-items:flex-start;justify-content:center;padding-top:12vh}.search-command.show{display:flex}.search-box{width:min(650px,92%);background:#101218;border:1px solid #30343e;border-radius:17px;box-shadow:0 25px 80px rgba(0,0,0,.5);overflow:hidden}.search-box input{border:0;border-bottom:1px solid var(--line);border-radius:0;font-size:17px;padding:17px}.search-results{max-height:55vh;overflow:auto}.search-result{padding:15px 17px;border-bottom:1px solid #1d2028;display:flex;justify-content:space-between;gap:12px;cursor:pointer}.search-result:hover{background:#171a22}.search-result small{color:#777f8d}
+.profile-cover{height:125px;border-radius:18px;background:radial-gradient(circle at 70% 20%,#272c38,#101218 55%,#0a0b0f);border:1px solid var(--line);position:relative;overflow:hidden}.profile-cover:after{content:"SOURCEHUB";position:absolute;right:20px;bottom:8px;font-size:42px;font-weight:900;color:rgba(255,255,255,.035);letter-spacing:-3px}.profile-head{margin-top:-30px;position:relative;padding-top:0}
+@media(max-width:700px){.dashboard-strip{grid-template-columns:repeat(2,1fr)}.hero-orbit{right:-100px;top:80px;opacity:.35}.command{display:none}}
+</style>
+</head>
+<body>
+
+<header class="header"><div class="nav">
+<div class="logo">SOURCEHUB</div>
+<button class="command desktop-search" onclick="openCommand()">⌘ Поиск <span class="kbd">Ctrl K</span></button>
+<button class="menu-toggle" id="menuToggle" type="button" aria-label="Открыть меню" aria-expanded="false" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+</div></header>
+<div class="menu-overlay" id="menuOverlay" onclick="if(event.target===this)closeMenu()">
+<aside class="menu-panel" role="dialog" aria-label="Меню SourceHub">
+<div class="menu-head"><strong>Меню</strong><button class="close" type="button" onclick="closeMenu()">×</button></div>
+<button class="menu-item" data-page="home" onclick="go('home');closeMenu()"><span>⌂</span>Главная</button>
+<button class="menu-item" data-page="profile" onclick="go('profile');closeMenu()"><span>◉</span>Мой профиль</button>
+<button class="menu-item publish-nav" data-page="publish" onclick="go('publish');closeMenu()"><span>＋</span>Опубликовать сорс</button>
+<button class="menu-item" type="button" onclick="closeMenu();openCommand()"><span>⌕</span>Поиск</button>
+<div class="menu-divider"></div>
+<button class="menu-item menu-auth" id="menuAuthButton" type="button" onclick="handleMenuAuth()"><span>↪</span>Войти</button>
+</aside></div>
+
+<!-- 1. ГЛАВНАЯ -->
+<section class="page active" id="home">
+<div class="hero-wrap"><div class="hero-orbit"></div><div class="hero"><div class="hero-kicker">SOURCEHUB / COMMUNITY</div>
+<h1>BUILD.<br>SHARE.<br>EXPLORE.</h1>
+<p>Площадка для публикации исходников мод-меню и проектов для офлайн-игр. Здесь пока пусто — первым опубликуй свой проект.</p>
+<div class="hero-actions">
+<button class="btn primary" onclick="go('publish')">＋ Опубликовать первый сорс</button>
+<button class="btn" onclick="showAbout()">Как это работает</button>
+</div>
+</div>
+
+<div class="dashboard-strip">
+<div class="dash"><b id="dashSources">0</b><span>сорсов в каталоге</span></div>
+<div class="dash"><b id="dashAuthors">0</b><span>авторов</span></div>
+<div class="dash"><b id="dashSaved">0</b><span>сохранено</span></div>
+<div class="dash"><b>24/7</b><span>доступ к каталогу</span></div>
+</div>
+<div class="quick-grid">
+<div class="quick-card"><span>01</span><strong>Публикации</strong><p>Добавляй ZIP, обложку, описание и версию.</p></div>
+<div class="quick-card"><span>02</span><strong>Профили</strong><p>Собирай свои проекты в одном месте.</p></div>
+<div class="quick-card"><span>03</span><strong>Избранное</strong><p>Сохраняй интересные проекты для себя.</p></div>
+</div>
+<div class="featured" id="featured"></div>
+<div class="section-row"><h2>Категории</h2><span>быстрый фильтр</span></div>
+<div class="chips">
+<button class="chip active" onclick="setFilter('')">Все</button>
+<button class="chip" onclick="setFilter('Android')">Android</button>
+<button class="chip" onclick="setFilter('Unity')">Unity</button>
+<button class="chip" onclick="setFilter('Offline Game')">Offline Game</button>
+<button class="chip" onclick="setFilter('C++')">C++</button>
+</div>
+<div class="filters">
+<input class="input" id="search" placeholder="🔎  Найти сорс..." oninput="renderFeed()"><select id="filter" style="display:none"><option value=""></option></select>
+<select class="select" id="sort" onchange="renderFeed()">
+<option value="new">Новые</option><option value="downloads">Популярные</option><option value="likes">По лайкам</option>
+</select>
+</div>
+<div class="section-row"><h2>Последние публикации</h2><span id="resultCount"></span></div>
+<div class="grid" id="feed"></div>
+</section>
+
+<!-- 2. МОЙ ПРОФИЛЬ -->
+<section class="page" id="profile">
+<div class="profile-cover"></div><div class="profile-head">
+<div class="avatar" id="avatar">F</div>
+<div><h1 id="profileName">Гость</h1><div class="muted" id="profileBio">Войди или зарегистрируйся</div><div class="muted" id="profileUserId" style="font-size:11px;margin-top:6px">Не авторизован</div></div>
+</div>
+<div class="stats">
+<div class="stat"><strong id="statPosts">0</strong><span>Публикаций</span></div>
+<div class="stat"><strong id="statDownloads">0</strong><span>Скачиваний</span></div>
+</div>
+<div class="card" style="margin-bottom:20px">
+<button class="btn" onclick="editProfile()">Изменить профиль</button>
+</div>
+<div class="activity">
+<h3>Недавняя активность</h3>
+<div class="activity-row"><div class="activity-icon">＋</div><span>Создай первую публикацию — она появится здесь.</span></div>
+<div class="activity-row"><div class="activity-icon">☆</div><span>Сохраняй понравившиеся проекты в избранное.</span></div>
+</div>
+<h2>Мои публикации</h2>
+<div class="grid" id="mySources"></div>
+<div class="section-row"><h2>Сохранённые</h2><span>избранные сорсы</span></div>
+<div class="grid" id="savedSources"></div>
+</section>
+
+<!-- 3. ПУБЛИКАЦИЯ -->
+<section class="page form-page" id="publish">
+<h1>Публикация</h1>
+<p class="muted">Добавь свой исходник в ленту.</p>
+<div class="notice">Публикации доступны только авторизованным пользователям. ZIP и обложка загружаются в облачное хранилище, а публикация появляется в общей ленте SourceHub.</div>
+<form class="form" id="publishForm">
+<label>Название
+<input class="input" id="pTitle" maxlength="80" placeholder="Например: Ghost Menu" required>
+</label>
+<label>Игра / категория
+<select class="select" id="pGame"><option>Android</option><option>Unity</option><option>Offline Game</option><option>C++</option><option>Other</option></select>
+</label>
+<label>Версия
+<input class="input" id="pVersion" maxlength="20" value="1.0.0">
+</label>
+<label>Описание
+<textarea class="textarea" id="pDescription" maxlength="3000" placeholder="Опиши свой исходник..."></textarea>
+</label>
+<label>Обложка
+<div class="filebox"><input id="pImage" type="file" accept="image/*"></div>
+</label>
+<label>ZIP исходника
+<div class="filebox"><input id="pZip" type="file" accept=".zip" required></div>
+</label>
+<div id="publishMsg" class="error"></div>
+<button class="btn primary full" type="submit">Опубликовать сорс</button>
+</form>
+</section>
+
+<!-- 4. СТРАНИЦА СОРСА -->
+<section class="page detail" id="source">
+<button class="btn back" onclick="go('home')">← Назад</button>
+<div id="sourceContent"></div>
+</section>
+
+<div class="modal" id="profileModal">
+<div class="modalbox">
+<div class="modalhead"><h2>Профиль</h2><button class="close" onclick="closeProfile()">×</button></div>
+<form class="form" id="profileForm">
+<label>Ник<input class="input" id="editName" maxlength="30"></label>
+<label>Описание<input class="input" id="editBio" maxlength="120"></label>
+<label>Telegram<input class="input" id="editTelegram" maxlength="100" placeholder="@username"></label>
+<button class="btn primary" type="submit">Сохранить</button>
+</form>
+</div></div>
+
+<div class="toast" id="toast"></div>
+<div class="modal" id="authModal">
+<div class="modalbox">
+<div class="modalhead"><h2 id="authTitle">Вход в SourceHub</h2><button class="close" id="authClose" type="button">×</button></div>
+<form class="form" id="authForm">
+<input type="hidden" id="authMode" value="login">
+<label id="authUsernameWrap" style="display:none">Ник<input class="input" id="authUsername" maxlength="30" autocomplete="username" placeholder="source_dev"></label>
+<label>Email<input class="input" id="authEmail" type="email" autocomplete="email" required placeholder="you@example.com"></label>
+<label>Пароль<input class="input" id="authPassword" type="password" minlength="6" autocomplete="current-password" required placeholder="Минимум 6 символов"></label>
+<div id="authMsg" class="error"></div>
+<button class="btn primary full" id="authSubmit" type="submit">Войти</button>
+<button class="btn full" id="authSwitch" type="button">Создать аккаунт</button>
+</form></div></div>
+<div class="search-command" id="commandModal" onclick="if(event.target===this)closeCommand()">
+<div class="search-box">
+<input class="input" id="commandInput" placeholder="Поиск по названию, игре или автору..." oninput="commandSearch()">
+<div class="search-results" id="commandResults"></div>
+</div></div><footer class="footer">SourceHub · Mod Menu Sources</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_CONFIG = {
+  url: 'https://sqpftkiprqtkdnykbwau.supabase.co',
+  key: 'sb_publishable_Szp-tIKZKGV3c16ukmRwPg_7GsC6qtB'
+};
+
+const backendReady = SUPABASE_CONFIG.url.startsWith('https://') && !SUPABASE_CONFIG.url.includes('PASTE_') && !SUPABASE_CONFIG.key.includes('PASTE_');
+const sb = backendReady && window.supabase ? window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.key) : null;
+
+let sources=[];
+let profile={name:'Гость',bio:'Войди или зарегистрируйся',telegram:'',id:null};
+let savedIds=JSON.parse(localStorage.getItem('sourcehub_saved_v3')||'[]');
+let currentUser=null;
+let profileCache=new Map();
+
+const $ = id => document.getElementById(id);
+const esc = value => String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]));
+const size = n => { n=Number(n)||0; if(n<1024)return `${n} B`; if(n<1048576)return `${(n/1024).toFixed(1)} KB`; return `${(n/1048576).toFixed(1)} MB`; };
+const shortId = id => id ? `${id.slice(0,8)}…${id.slice(-4)}` : '—';
+function setText(id,v){if($(id))$(id).textContent=v}
+function isSaved(id){return savedIds.includes(String(id))}
+function saveSaved(){localStorage.setItem('sourcehub_saved_v3',JSON.stringify(savedIds))}
+function safeName(name){return String(name||'source.zip').replace(/[^a-zA-Z0-9._-]/g,'_').slice(0,100)}
+function toast(text){const t=$('toast');if(!t)return;t.textContent=text;t.classList.add('show');clearTimeout(window.__toast);window.__toast=setTimeout(()=>t.classList.remove('show'),1700)}
+function backendMessage(){if(!backendReady)return 'Регистрация сейчас отключена: к этому сайту не подключён Supabase. Укажи Project URL и Publishable/anon key в конфигурации сайта и повтори попытку.';return ''}
+
+function setAuthButton(){
+  const label=currentUser ? `Аккаунт · ${profile.name||shortId(currentUser.id)}` : 'Войти';
+  const b=$('authButton'); if(b){b.textContent=label;b.onclick=currentUser?signOut:openAuth}
+  const m=$('menuAuthButton'); if(m){m.innerHTML=`<span>${currentUser?'↪':'↪'}</span>${currentUser?'Выйти · '+esc(profile.name||shortId(currentUser.id)):'Войти'}`}
+}
+function toggleMenu(){const m=$('menuOverlay');if(!m)return;m.classList.toggle('show');$('menuToggle')?.setAttribute('aria-expanded',m.classList.contains('show')?'true':'false');document.body.style.overflow=m.classList.contains('show')?'hidden':'';document.querySelectorAll('.menu-item[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===(document.querySelector('.page.active')?.id||'home')))}
+function closeMenu(){const m=$('menuOverlay');if(!m)return;m.classList.remove('show');$('menuToggle')?.setAttribute('aria-expanded','false');document.body.style.overflow=''}
+function handleMenuAuth(){closeMenu();if(currentUser)signOut();else openAuth('login')}
+function openAuth(mode='login'){
+  if(!$('authModal'))return;
+  $('authMode').value=mode;
+  $('authTitle').textContent=mode==='register'?'Создание аккаунта':'Вход в SourceHub';
+  $('authSubmit').textContent=mode==='register'?'Зарегистрироваться':'Войти';
+  $('authSwitch').textContent=mode==='register'?'У меня уже есть аккаунт':'Создать аккаунт';
+  $('authUsernameWrap').style.display=mode==='register'?'block':'none';
+  $('authMsg').className=backendReady?'error':'error';$('authMsg').textContent=backendMessage();
+  $('authModal').classList.add('show');
+}
+function closeAuth(){$('authModal')?.classList.remove('show')}
+function switchAuth(){openAuth($('authMode').value==='register'?'login':'register')}
+async function signOut(){if(!sb)return;await sb.auth.signOut();toast('Вы вышли из аккаунта')}
+
+async function loadProfile(userId=currentUser?.id){
+  if(!sb||!userId)return null;
+  const {data,error}=await sb.from('profiles').select('id,username,bio,telegram,created_at').eq('id',userId).maybeSingle();
+  if(error){console.error(error);return null}
+  if(data){profile={name:data.username,bio:data.bio,telegram:data.telegram,id:data.id};profileCache.set(data.id,data);return data}
+  // Fallback for projects where the signup trigger was not installed: create the profile client-side.
+  const raw=String(currentUser?.user_metadata?.username||'user_'+String(userId).replace(/-/g,'').slice(0,8));
+  const username=(raw.replace(/[^A-Za-z0-9_-]/g,'').slice(0,30)||('user_'+String(userId).replace(/-/g,'').slice(0,8))).slice(0,30);
+  const fallback={id:userId,username,bio:'Автор SourceHub',telegram:''};
+  const ins=await sb.from('profiles').upsert(fallback,{onConflict:'id'}).select('id,username,bio,telegram,created_at').single();
+  if(ins.error){console.error(ins.error);return null}
+  profile={name:ins.data.username,bio:ins.data.bio,telegram:ins.data.telegram,id:ins.data.id};profileCache.set(ins.data.id,ins.data);return ins.data;
+}
+async function loadSources(){
+  if(!sb){sources=[];return}
+  const {data,error}=await sb.from('sources').select('*').order('created_at',{ascending:false}).limit(500);
+  if(error){console.error(error);toast('Не удалось загрузить каталог');return}
+  sources=(data||[]).map(s=>({
+    id:s.id,userId:s.user_id,title:s.title,game:s.game,version:s.version,description:s.description,
+    author:s.author,fileName:s.file_name,size:s.file_size,zipUrl:s.zip_url,image:s.image_url||'',
+    likes:s.likes,downloads:s.downloads,created:new Date(s.created_at).getTime()
+  }));
+}
+async function loadInitial(){
+  if(!sb){setAuthButton();renderAll();return}
+  const {data:{session}}=await sb.auth.getSession();
+  currentUser=session?.user||null;
+  if(currentUser) await loadProfile(); else profile={name:'Гость',bio:'Войди или зарегистрируйся',telegram:'',id:null};
+  await loadSources();
+  setAuthButton();renderAll();
+  sb.auth.onAuthStateChange(async (_event,session)=>{
+    currentUser=session?.user||null;
+    if(currentUser) await loadProfile(); else profile={name:'Гость',bio:'Войди или зарегистрируйся',telegram:'',id:null};
+    await loadSources();setAuthButton();renderAll();
+  });
+}
+function updateDashboard(){setText('dashSources',sources.length);setText('dashAuthors',new Set(sources.map(s=>s.userId||s.author)).size);setText('dashSaved',savedIds.length)}
+function card(s){return `<article class="card source">
+ ${s.image?`<img class="cover" src="${esc(s.image)}" alt="" loading="lazy" decoding="async">`:'<div class="cover-placeholder">⌁</div>'}
+ <div class="top"><span class="tag">${esc(s.game)}</span><button class="bookmark ${isSaved(s.id)?'saved':''}" onclick="event.stopPropagation();toggleSave('${esc(s.id)}')">${isSaved(s.id)?'★':'☆'}</button></div>
+ <h3>${esc(s.title)}</h3><p>${esc(s.description||'Без описания')}</p>
+ <div class="meta"><span>by ${esc(s.author)}</span><span>♥ ${Number(s.likes)||0}</span><span>↓ ${Number(s.downloads)||0}</span></div>
+ <button class="btn primary full" onclick="go('source','${esc(s.id)}')">Открыть</button></article>`}
+function renderFeatured(){
+ const box=$('featured');if(!box)return;const arr=[...sources].sort((a,b)=>(b.downloads||0)-(a.downloads||0));const main=arr[0],second=arr[1];
+ if(!main){box.innerHTML=`<article class="feature"><div class="feature-content"><span class="tag">SOURCEHUB</span><h2>Каталог ждёт первый проект</h2><p>Здесь будут выделяться самые интересные публикации сообщества.</p><button class="btn primary" onclick="go('publish')">Создать первый сорс →</button></div></article><article class="feature mini-feature"><div><div class="mini-number">00</div><span class="source-badge"><span class="dot"></span> Пустой каталог</span></div><div><h3>Будь первым</h3><p>Опубликуй исходник и создай первую карточку в ленте.</p></div></article>`;return}
+ box.innerHTML=`<article class="feature">${main.image?`<img src="${esc(main.image)}" alt="" loading="lazy" decoding="async">`:''}<div class="feature-gradient"></div><div class="feature-content"><span class="tag">🔥 Популярный сорс</span><h2>${esc(main.title)}</h2><p>${esc(main.description||'Популярная публикация сообщества.')}</p><button class="btn primary" onclick="go('source','${esc(main.id)}')">Открыть сорс →</button></div></article><article class="feature mini-feature"><div><div class="mini-number">#01</div><span class="source-badge"><span class="dot"></span> Сейчас в тренде</span></div><div><h3>${esc(second?.title||'Твоя публикация')}</h3><p>${esc(second?.author||'Стань первым автором и опубликуй свой исходник.')}</p><button class="btn" onclick="${second?`go('source','${esc(second.id)}')`:`go('publish')`}\">${second?'Посмотреть':'Опубликовать'}</button></div></article>`;
+}
+function renderFeed(){
+ renderFeatured();updateDashboard();const search=($('search')?.value||'').toLowerCase().trim(),filter=$('filter')?.value||'',sort=$('sort')?.value||'new';
+ let arr=sources.filter(s=>{const text=`${s.title} ${s.description} ${s.author} ${s.game}`.toLowerCase();return(!filter||s.game===filter)&&(!search||text.includes(search))});
+ if(sort==='downloads')arr.sort((a,b)=>(b.downloads||0)-(a.downloads||0));else if(sort==='likes')arr.sort((a,b)=>(b.likes||0)-(a.likes||0));else arr.sort((a,b)=>(b.created||0)-(a.created||0));
+ setText('resultCount',`${arr.length} проектов`);if($('feed'))$('feed').innerHTML=arr.length?arr.map(card).join(''):`<div class="empty-hero" style="grid-column:1/-1"><div class="empty-icon">⌁</div><h2>${search?'Ничего не найдено':'Лента пока пустая'}</h2><p>${search?'Попробуй изменить запрос.':'Здесь появятся исходники сообщества.'}</p><button class="btn primary" onclick="go('publish')">${currentUser?'Опубликовать сорс':'Войти и опубликовать'}</button></div>`;
+}
+function renderProfile(){
+ if(!$('profileName'))return;setText('profileName',profile.name);setText('profileBio',profile.bio);setText('avatar',(profile.name?.[0]||'G').toUpperCase());setText('profileUserId',profile.id||'Войдите, чтобы получить User ID');
+ const mine=currentUser?sources.filter(s=>s.userId===currentUser.id):[];setText('statPosts',mine.length);setText('statDownloads',mine.reduce((sum,s)=>sum+(s.downloads||0),0));
+ if($('mySources'))$('mySources').innerHTML=currentUser?(mine.length?mine.map(card).join(''):`<div class="empty-hero" style="grid-column:1/-1"><div class="empty-icon">＋</div><h2>Публикаций нет</h2><p>Опубликуй первый исходник.</p><button class="btn primary" onclick="go('publish')">Создать публикацию</button></div>`):`<div class="empty-hero" style="grid-column:1/-1"><div class="empty-icon">◉</div><h2>Профиль ещё не подключён</h2><p>Регистрация создаёт постоянный аккаунт и уникальный User ID.</p><button class="btn primary" onclick="openAuth('register')">Создать аккаунт</button></div>`;
+ const saved=sources.filter(s=>isSaved(s.id));if($('savedSources'))$('savedSources').innerHTML=saved.length?saved.map(card).join(''):'<div class="empty">Сохранённых сорсов пока нет.</div>';
+}
+function renderDetail(id){
+ const s=sources.find(x=>String(x.id)===String(id));if(!s){$('sourceContent').innerHTML='<div class="empty">Сорс не найден.</div>';return}
+ $('sourceContent').innerHTML=`${s.image?`<img class="detail-cover" src="${esc(s.image)}" alt="" decoding="async">`:''}<div class="detail-info"><span class="tag">${esc(s.game)}</span><span class="tag">v${esc(s.version)}</span><span class="muted">Автор: ${esc(s.author)}</span></div><h1>${esc(s.title)}</h1><div class="meta"><span>♥ ${s.likes||0}</span><span>↓ ${s.downloads||0} скачиваний</span><span>${size(s.size)}</span></div><div class="description">${esc(s.description||'Описание отсутствует.')}</div><div class="detail-actions"><button class="btn primary" onclick="downloadSource('${esc(s.id)}')">↓ Скачать ZIP</button><button class="btn" onclick="like('${esc(s.id)}')">♥ Нравится</button><button class="btn" onclick="toggleSave('${esc(s.id)}')">${isSaved(s.id)?'★ Сохранено':'☆ Сохранить'}</button>${currentUser&&s.userId===currentUser.id?`<button class="btn" onclick="deleteSource('${esc(s.id)}')">Удалить</button>`:''}</div>`;
+}
+async function like(id){
+ if(!currentUser){openAuth('login');return}if(!sb)return;const {data,error}=await sb.rpc('toggle_source_like',{p_source:id});if(error){toast('Не удалось изменить лайк');console.error(error);return}const s=sources.find(x=>String(x.id)===String(id));if(s)s.likes=Math.max(0,(s.likes||0)+(data?1:-1));renderDetail(id);renderFeed();toast(data?'Лайк поставлен':'Лайк убран')
+}
+async function downloadSource(id){
+ const s=sources.find(x=>String(x.id)===String(id));if(!s)return;if(!s.zipUrl){toast('ZIP-файл отсутствует');return}if(sb)await sb.rpc('increment_download',{p_source:id});s.downloads=(s.downloads||0)+1;const a=document.createElement('a');a.href=s.zipUrl;a.target='_blank';a.rel='noopener';a.download=s.fileName||'source.zip';document.body.appendChild(a);a.click();a.remove();renderDetail(id);renderFeed();toast('Скачивание началось')
+}
+function toggleSave(id){id=String(id);savedIds.includes(id)?savedIds=savedIds.filter(x=>x!==id):savedIds.push(id);saveSaved();renderProfile();renderFeed();updateDashboard();toast(savedIds.includes(id)?'Добавлено в сохранённые':'Удалено из сохранённых')}
+function setFilter(value){if($('filter'))$('filter').value=value;document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));[...document.querySelectorAll('.chip')].find(x=>x.textContent.trim()===(value||'Все'))?.classList.add('active');renderFeed()}
+function openCommand(){$('commandModal')?.classList.add('show');if($('commandInput')){$('commandInput').value='';commandSearch();setTimeout(()=>$('commandInput').focus(),50)}}
+function closeCommand(){$('commandModal')?.classList.remove('show')}
+function commandSearch(){const q=($('commandInput')?.value||'').toLowerCase().trim();const arr=sources.filter(s=>!q||`${s.title} ${s.game} ${s.author}`.toLowerCase().includes(q)).slice(0,12);if($('commandResults'))$('commandResults').innerHTML=arr.length?arr.map(s=>`<div class="search-result" onclick="closeCommand();go('source','${esc(s.id)}')"><span><b>${esc(s.title)}</b><br><small>${esc(s.game)} · ${esc(s.author)}</small></span><span>→</span></div>`).join(''):'<div class="empty">Ничего не найдено</div>'}
+function showAbout(){alert('SOURCEHUB\n\nОбщая база пользователей и публикаций работает через Supabase. Регистрация создаёт уникальный User ID. ZIP и обложки хранятся в облачном Storage.')}
+function editProfile(){if(!currentUser){openAuth('login');return}$('editName').value=profile.name;$('editBio').value=profile.bio;$('editTelegram').value=profile.telegram||'';$('profileModal').classList.add('show')}
+function closeProfile(){$('profileModal').classList.remove('show')}
+async function deleteSource(id){if(!currentUser||!sb)return;const s=sources.find(x=>String(x.id)===String(id));if(!s||s.userId!==currentUser.id)return;if(!confirm('Удалить публикацию?'))return;const {error}=await sb.from('sources').delete().eq('id',id);if(error){toast('Не удалось удалить');return}await loadSources();renderAll();go('home');toast('Публикация удалена')}
+
+async function publishSource(e){
+ e.preventDefault();const msg=$('publishMsg');msg.className='error';msg.textContent='';if(!currentUser){openAuth('login');msg.textContent='Сначала войди в аккаунт.';return}if(!sb){msg.textContent=backendMessage();return}
+ const zip=$('pZip').files[0],image=$('pImage').files[0];if(!zip||!zip.name.toLowerCase().endsWith('.zip')){msg.textContent='Выбери ZIP-файл.';return}if(zip.size>100*1024*1024){msg.textContent='ZIP должен быть не больше 100 MB.';return}
+ try{
+  msg.className='success';msg.textContent='Загрузка ZIP…';const uid=currentUser.id,base=crypto.randomUUID(),zipPath=`${uid}/${base}-${safeName(zip.name)}`;
+  let up=await sb.storage.from('source-files').upload(zipPath,zip,{contentType:'application/zip',upsert:false});if(up.error)throw up.error;const {data:zipPub}=sb.storage.from('source-files').getPublicUrl(zipPath);
+  let imagePath=null,imageUrl=null;if(image){if(image.size>10*1024*1024)throw new Error('Обложка должна быть не больше 10 MB.');imagePath=`${uid}/${base}-${safeName(image.name)}`;up=await sb.storage.from('source-covers').upload(imagePath,image,{upsert:false});if(up.error)throw up.error;imageUrl=sb.storage.from('source-covers').getPublicUrl(imagePath).data.publicUrl}
+  const row={user_id:uid,title:$('pTitle').value.trim(),game:$('pGame').value,version:$('pVersion').value.trim()||'1.0.0',description:$('pDescription').value.trim(),author:profile.name,zip_path:zipPath,zip_url:zipPub.publicUrl,image_path:imagePath,image_url:imageUrl,file_name:zip.name,file_size:zip.size};
+  const {error}=await sb.from('sources').insert(row);if(error)throw error;await loadSources();e.target.reset();msg.textContent='Опубликовано в общей ленте.';renderAll();setTimeout(()=>go('home'),500)
+ }catch(err){console.error(err);msg.className='error';msg.textContent=err?.message||'Не удалось опубликовать. Проверь Storage/RLS и настройки Supabase.'}
+}
+async function saveProfileChanges(e){e.preventDefault();if(!currentUser||!sb)return;const username=$('editName').value.trim()||profile.name,bio=$('editBio').value.trim()||'Автор SourceHub',telegram=$('editTelegram').value.trim();const {data,error}=await sb.from('profiles').update({username,bio,telegram}).eq('id',currentUser.id).select().single();if(error){toast(error.message.includes('duplicate')?'Этот ник уже занят':'Не удалось сохранить профиль');return}profile={name:data.username,bio:data.bio,telegram:data.telegram,id:data.id};profileCache.set(data.id,data);closeProfile();setAuthButton();renderAll();toast('Профиль сохранён')}
+function suggestUsername(){
+  const email=$('authEmail')?.value.trim()||'';
+  const field=$('authUsername');
+  if($('authMode')?.value!=='register'||!field||field.value.trim())return;
+  const base=email.split('@')[0].replace(/[^A-Za-z0-9_-]/g,'_').slice(0,30);
+  if(base.length>=3)field.value=base;
+}
+async function authSubmit(e){
+ e.preventDefault();const mode=$('authMode').value,email=$('authEmail').value.trim(),password=$('authPassword').value,username=$('authUsername').value.trim(),msg=$('authMsg');msg.className='error';msg.textContent='';if(!sb){msg.textContent=backendMessage();return}if(password.length<6){msg.textContent='Пароль должен содержать минимум 6 символов.';return}
+ const submit=$('authSubmit');submit.disabled=true;submit.textContent='Подождите…';try{
+  if(mode==='register'){
+   if(!/^[A-Za-z0-9_-]{3,30}$/.test(username)){msg.textContent='Ник: 3–30 символов, только латиница, цифры, _ или -.';return}
+   const {data,error}=await sb.auth.signUp({email,password,options:{data:{username},emailRedirectTo:location.origin+location.pathname}});if(error)throw error;if(data.session){await loadProfile(data.user.id);closeAuth();toast('Аккаунт создан. User ID выдан.')}else{msg.className='success';msg.textContent='Аккаунт создан. Проверь почту и подтверди email, затем войди.'}
+  }else{const {data,error}=await sb.auth.signInWithPassword({email,password});if(error)throw error;closeAuth();toast('Вход выполнен');await loadSources();renderAll()}
+ }catch(err){msg.textContent=err?.message||'Ошибка авторизации'}finally{submit.disabled=false;submit.textContent=mode==='register'?'Зарегистрироваться':'Войти'}
+}
+function renderAll(){renderFeed();renderProfile();updateDashboard();if($('authState'))$('authState').textContent=currentUser?`User ID: ${currentUser.id}`:'Не авторизован'}
+function go(page,id){if(page==='publish'&&!currentUser){closeMenu();openAuth('login');return}document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));const el=$(page);if(el)el.classList.add('active');document.querySelectorAll('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===page));if(page==='source')renderDetail(id);closeMenu();window.scrollTo(0,0)}
+
+$('publishForm')?.addEventListener('submit',publishSource);
+$('profileForm')?.addEventListener('submit',saveProfileChanges);
+$('authForm')?.addEventListener('submit',authSubmit);
+$('authSwitch')?.addEventListener('click',switchAuth);
+$('authClose')?.addEventListener('click',closeAuth);
+$('authEmail')?.addEventListener('blur',suggestUsername);
+document.querySelectorAll('.chip').forEach(chip=>chip.addEventListener('click',()=>setFilter(chip.textContent.trim()==='Все'?'':chip.textContent.trim())));
+document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openCommand()}if(e.key==='Escape'){closeCommand();closeAuth();closeProfile()}});
+requestAnimationFrame(loadInitial);
+</script>
+</body>
+</html>
